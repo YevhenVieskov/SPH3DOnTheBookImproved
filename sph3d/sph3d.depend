@@ -1,0 +1,11 @@
+# depslib dependency file v1.0
+1672683047 source:/home/yevhenv/sph/SPH3DOnTheBookImproved/art_heat.f
+
+1672683085 source:/home/yevhenv/sph/SPH3DOnTheBookImproved/art_visc.f
+
+1672683070 source:/home/yevhenv/sph/SPH3DOnTheBookImproved/av_vel.f
+
+1672257326 source:/home/yevhenv/sph/SPH3DOnTheBookImproved/ex.f90
+
+1672683214 source:/home/yevhenv/sph/SPH3DOnTheBookImproved/combined_visc.for
+

@@ -2,7 +2,7 @@
      &           pair_i,pair_j,w,dwdx,dvxdt,dedt)
 
 c----------------------------------------------------------------------
-c     Subroutine to calculate the artificial viscosity (Monaghan, 1992) 
+c     Subroutine to calculate the artificial viscosity (Monaghan, 1992)
 
 c     ntotal : Number of particles (including virtual particles)    [in]
 c     hsml   : Smoothing Length                                     [in]
@@ -16,14 +16,14 @@ c     pair_i : List of first partner of interaction pair            [in]
 c     pair_j : List of second partner of interaction pair           [in]
 c     w      : Kernel for all interaction pairs                     [in]
 c     dwdx   : Derivative of kernel with respect to x, y and z      [in]
-c     dvxdt  : Acceleration with respect to x, y and z             [out] 
+c     dvxdt  : Acceleration with respect to x, y and z             [out]
 c     dedt   : Change of specific internal energy                  [out]
-      use interf
+c      use interf
       implicit none
       include 'param.inc'
-      
+
       integer ntotal, niac, pair_i(:),
-     &        pair_j(:)            
+     &        pair_j(:)
       double precision hsml(:), mass(:), x(:,:),vx(:,:),
      &       rho(:), c(:), w(:),
      &       dwdx(:,:), dvxdt(:,:), dedt(:)
@@ -31,29 +31,29 @@ c     dedt   : Change of specific internal energy                  [out]
       double precision dx, alpha, beta, etq, piv,
      &       muv, vr, rr, h, mc, mrho, mhsml
       double precision,allocatable:: dvx(:)
-     
-     
+
+
 c     Parameter for the artificial viscosity:
 c     Shear viscosity
       parameter( alpha = 1.e0   )
-     
+
 c     Bulk viscosity
-      parameter( beta  = 1.e0  ) 
-      
+      parameter( beta  = 1.e0  )
+
 c     Parameter to avoid singularities
       parameter( etq   = 0.1e0 )
-      
+
       allocate(dvx(dim))
-      
+
       do i=1,ntotal
         do d=1,dim
           dvxdt(d,i) = 0.e0
         enddo
         dedt(i) = 0.e0
-      enddo   
-     
+      enddo
+
 c     Calculate SPH sum for artificial viscosity
-      
+
       do k=1,niac
         i = pair_i(k)
         j = pair_j(k)
@@ -72,14 +72,14 @@ c     Artificial viscous force only if v_ij * r_ij < 0
         if (vr.lt.0.e0) then
 
 c     Calculate muv_ij = hsml v_ij * r_ij / ( r_ij^2 + hsml^2 etq^2 )
-            
+
           muv = mhsml*vr/(rr + mhsml*mhsml*etq*etq)
-          
+
 c     Calculate PIv_ij = (-alpha muv_ij c_ij + beta muv_ij^2) / rho_ij
 
           mc   = 0.5e0*(c(i) + c(j))
           mrho = 0.5e0*(rho(i) + rho(j))
-          piv  = (beta*muv - alpha*mc)*muv/mrho              
+          piv  = (beta*muv - alpha*mc)*muv/mrho
 
 c     Calculate SPH sum for artificial viscous force
 
@@ -96,7 +96,7 @@ c     Calculate SPH sum for artificial viscous force
 c     Change of specific internal energy:
 
       do i=1,ntotal
-         dedt(i) = 0.5e0*dedt(i)        
+         dedt(i) = 0.5e0*dedt(i)
       enddo
       deallocate(dvx)
       end

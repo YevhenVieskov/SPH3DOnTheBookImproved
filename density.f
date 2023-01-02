@@ -14,20 +14,20 @@ C     w      : Kernel for all interaction pairs                     [in]
 c     itype   : type of particles                                   [in]
 c     x       : Coordinates of all particles                        [in]
 c     rho    : Density                                             [out]
-      use interf
+c      use interf
       implicit none
       include 'param.inc'
-      
+
       integer ntotal, niac, pair_i(:),
-     &        pair_j(:), itype(:)  
+     &        pair_j(:), itype(:)
       double precision hsml(:),mass(:), w(:),
-     &       rho(:) 
-      integer i, j, k, d      
-      double precision selfdens,  r   
+     &       rho(:)
+      integer i, j, k, d
+      double precision selfdens,  r
       double precision,allocatable:: hv(:),wi(:)
       allocate(hv(dim),wi(maxn))
 c     wi(maxn)---integration of the kernel itself
-        
+
       do d=1,dim
         hv(d) = 0.e0
       enddo
@@ -36,7 +36,7 @@ c     Self density of each particle: Wii (Kernel for distance 0)
 c     and take contribution of particle itself:
 
       r=0.
-      
+
 c     Firstly calculate the integration of the kernel over the space
 
       do i=1,ntotal
@@ -67,15 +67,15 @@ c     Calculate SPH sum for rho:
       enddo
 
 c     Thirdly, calculate the normalized rho, rho=sum(rho)/sum(w)
-     
-      if (nor_density) then 
+
+      if (nor_density) then
         do i=1, ntotal
           rho(i)=rho(i)/wi(i)
         enddo
-      endif 
+      endif
       deallocate(hv,wi)
       end
-      
+
       subroutine con_density(ntotal,mass,niac,pair_i,pair_j,
      &           dwdx,vx,itype,x,rho, drhodt)
 
@@ -92,35 +92,35 @@ c     vx     : Velocities of all particles                          [in]
 c     itype   : type of particles                                   [in]
 c     x      : Coordinates of all particles                         [in]
 c     rho    : Density                                              [in]
-c     drhodt : Density change rate of each particle                [out]   
+c     drhodt : Density change rate of each particle                [out]
       use interf
       implicit none
       include 'param.inc'
-      
+
       integer ntotal,niac,pair_i(:),
-     &        pair_j(:), itype(:)    
+     &        pair_j(:), itype(:)
       double precision mass(:), dwdx(:, :),
      &       vx(:,:), x(:,:), rho(:), drhodt(:)
-      integer i,j,k,d    
-      double precision    vcc 
-      double precision,allocatable:: dvx(:) 
+      integer i,j,k,d
+      double precision    vcc
+      double precision,allocatable:: dvx(:)
       allocate(dvx(dim))
       do i = 1, ntotal
         drhodt(i) = 0.
       enddo
-     
-      do k=1,niac      
+
+      do k=1,niac
         i = pair_i(k)
         j = pair_j(k)
         do d=1,dim
-          dvx(d) = vx(d,i) - vx(d,j) 
-        enddo        
-        vcc = dvx(1)*dwdx(1,k)        
+          dvx(d) = vx(d,i) - vx(d,j)
+        enddo
+        vcc = dvx(1)*dwdx(1,k)
         do d=2,dim
           vcc = vcc + dvx(d)*dwdx(d,k)
-        enddo    
+        enddo
         drhodt(i) = drhodt(i) + mass(j)*vcc
-        drhodt(j) = drhodt(j) + mass(i)*vcc       
-      enddo    
+        drhodt(j) = drhodt(j) + mass(i)*vcc
+      enddo
       deallocate(dvx)
       end

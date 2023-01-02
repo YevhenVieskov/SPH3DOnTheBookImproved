@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="sph3d" />
+		<Option pch_mode="2" />
+		<Option compiler="g95" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/sph3d" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gfortran" />
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/sph3d" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gfortran" />
+			</Target>
+		</Build>
+		<Unit filename="../adke.for" />
+		<Unit filename="../art_heat.f" />
+		<Unit filename="../art_visc.f" />
+		<Unit filename="../av_vel.f" />
+		<Unit filename="../beeman.for" />
+		<Unit filename="../break_dam.for" />
+		<Unit filename="../combined_visc.for" />
+		<Unit filename="../density.f" />
+		<Unit filename="../direct_find.f" />
+		<Unit filename="../eos.f" />
+		<Unit filename="../ex.f90" />
+		<Unit filename="../external_force.f" />
+		<Unit filename="../ghost_part.for" />
+		<Unit filename="../gmod_part.for" />
+		<Unit filename="../grid_geom.f" />
+		<Unit filename="../hsml.f" />
+		<Unit filename="../init_grid.f" />
+		<Unit filename="../input.f" />
+		<Unit filename="../internal_force.f" />
+		<Unit filename="../kernel.f" />
+		<Unit filename="../link_list.f" />
+		<Unit filename="../lr_flux.for" />
+		<Unit filename="../mod_interf.for" />
+		<Unit filename="../mv_interf.for" />
+		<Unit filename="../outflow.for" />
+		<Unit filename="../output.f" />
+		<Unit filename="../param.inc" />
+		<Unit filename="../param_dam.inc" />
+		<Unit filename="../prcorr.for" />
+		<Unit filename="../pressure_pd.for" />
+		<Unit filename="../puzir.for" />
+		<Unit filename="../raley_taylor.for" />
+		<Unit filename="../refine.for" />
+		<Unit filename="../reigenvalues.for" />
+		<Unit filename="../reigenvectors.for" />
+		<Unit filename="../riemann.for" />
+		<Unit filename="../roe_flux.for" />
+		<Unit filename="../shepard.for" />
+		<Unit filename="../shifting.for" />
+		<Unit filename="../single_step.f" />
+		<Unit filename="../sound_speed.for" />
+		<Unit filename="../sph.f" />
+		<Unit filename="../sym_euler.f" />
+		<Unit filename="../sym_verlet.for" />
+		<Unit filename="../sym_verlet2.for" />
+		<Unit filename="../symplectic.for" />
+		<Unit filename="../tank.for" />
+		<Unit filename="../tank15.for" />
+		<Unit filename="../tensile.for" />
+		<Unit filename="../time_elapsed.f90" />
+		<Unit filename="../time_integration.f" />
+		<Unit filename="../time_print.f90" />
+		<Unit filename="../treedefs.f90" />
+		<Unit filename="../treeload.for" />
+		<Unit filename="../treesearch.for" />
+		<Unit filename="../verlet.for" />
+		<Unit filename="../virt_part.f" />
+		<Unit filename="../viscosity.f" />
+		<Unit filename="../vtk.for" />
+		<Unit filename="../ws_coeff.for" />
+		<Extensions />
+	</Project>
+</CodeBlocks_project_file>
