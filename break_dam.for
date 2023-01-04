@@ -1,8 +1,8 @@
-      subroutine bdam(x, vx, mass, rho, p, u,
+      subroutine bdam(x, vx, mass, rho, p, u, 
      &                        itype, hsml, ntotal)
 
-c----------------------------------------------------------------------
-c     This subroutine is used to generate initial data for the
+c----------------------------------------------------------------------     
+c     This subroutine is used to generate initial data for the 
 c     2 d shear driven cavity probem with Re = 1
 c     x-- coordinates of particles                                 [out]
 c     vx-- velocities of particles                                 [out]
@@ -14,11 +14,11 @@ c     itype-- types of particles                                   [out]
 c          =2   water
 c     h-- smoothing lengths of particles                           [out]
 c     ntotal-- total particle number                               [out]
-c      use interf
+      use interf
       use ex
-      implicit none
+      implicit none     
       include 'param.inc'
-
+      
       integer itype(:)[*], ntotal
       double precision x(:, :)[*], vx(:, :)[*], mass(:)[*],
      &     rho(:)[*], p(:)[*], u(:)[*], hsml(:)[*]
@@ -26,7 +26,7 @@ c      use interf
       double precision xl, yl, dx, dy !,c(:)
 
 c     Giving mass and smoothing length as well as other data.
-      if(this_image()==1) then
+      if(this_image()==1) then  
       m =2*20+1  !2*20+1
       n =2*40+1  !2*40+1
       mp = m-1
@@ -49,24 +49,24 @@ c     Giving mass and smoothing length as well as other data.
 
       do i = 1, mp*np
 	vx(1, i) = 0.
-	vx(2, i) = 0.
-        rho (i) = 1000.
-        mass(i) = dx*dy*rho(i)
-        p(i)= 9.81d0*rho(i)*(0.2-x(2,i))   !+1.0d5
+	vx(2, i) = 0.      
+        rho (i) = 1000.   
+        mass(i) = dx*dy*rho(i)  
+        p(i)= 9.81d0*rho(i)*(0.2-x(2,i))   !+1.0d5   
         u(i)=357.1
         itype(i) = 2
         hsml(i) = dx
       enddo
-
-c	initial particle distribution for tensile correction
+	 
+c	initial particle distribution for tensile correction	
 	 dpt=dx
 c	call vtk(x, vx, mass, rho, p, u, c, itype, hsml, ntotal,
 c     &		1111)
        end if
-      end
-
+      end	
+	
 	subroutine virt_dam(tm,dt, ntotal,nvirt,hsml,mass,x,vx,
-     &           rho,u,p,itype)
+     &           rho,u,p,itype) 
 
 c----------------------------------------------------------------------
 c   Subroutine to determine the information of virtual particles
@@ -90,25 +90,25 @@ c     itype   : type of particles                               [in|out]
      &                 rho(:), u(:), p(:)
       integer i, j, d, im, mp
       double precision xl, dx, v_inf,dt,tm,yl,dy
-      if(this_image()==1) then
-      if (vp_input) then
-
+      if(this_image()==1) then  
+      if (vp_input) then          
+                        
         open(1,file="../data/xv_vp.dat")
         open(2,file="../data/state_vp.dat")
-        open(3,file="../data/other_vp.dat")
+        open(3,file="../data/other_vp.dat")            
         read(1,*) nvirt
-        do j = 1, nvirt
-          i = ntotal + j
-          read(1,*)im, (x(d, i),d = 1, dim), (vx(d, i),d = 1, dim)
-          read(2,*)im, mass(i), rho(i), p(i), u(i)
-          read(3,*)im, itype(i), hsml(i)
-        enddo
+        do j = 1, nvirt   
+          i = ntotal + j      
+          read(1,*)im, (x(d, i),d = 1, dim), (vx(d, i),d = 1, dim)                     
+          read(2,*)im, mass(i), rho(i), p(i), u(i)        
+          read(3,*)im, itype(i), hsml(i)                            
+        enddo  
         close(1)
-        close(2)
-        close(3)
-
-	else
-
+        close(2) 
+        close(3) 
+      
+	else 
+       
 	nvirt = 0
         mp =2*40   !100      !40
 	xl = 0.8d0
@@ -122,8 +122,8 @@ c     Monaghan type virtual particle on the Lower side
 
         do i = 1, 2*mp+1
    	  nvirt = nvirt + 1
-	  x(1, ntotal + nvirt) = (i-1)*dx/2
-          x(2, ntotal + nvirt) = 0.
+	  x(1, ntotal + nvirt) = (i-1)*dx/2 
+          x(2, ntotal + nvirt) = 0.  
           vx(1, ntotal + nvirt) = 0.
 	  vx(2, ntotal + nvirt) = 0.
         enddo
@@ -132,7 +132,7 @@ c     Monaghan type virtual particle on the Left side
 
         do i = 1, 2*mp-1
    	  nvirt = nvirt + 1
-	  x(1, ntotal + nvirt) = 0.
+	  x(1, ntotal + nvirt) = 0. 
           x(2, ntotal + nvirt) = i*dy/2
           vx(1, ntotal + nvirt) = 0.
 	  vx(2, ntotal + nvirt) = 0.
@@ -141,8 +141,8 @@ c     Monaghan type virtual particle on the Right side
 
       do i = 1, 2*mp-1
    	  nvirt = nvirt + 1
-	  x(1, ntotal + nvirt) = xl
-          x(2, ntotal + nvirt) = i*dx/2
+	  x(1, ntotal + nvirt) = xl 
+          x(2, ntotal + nvirt) = i*dx/2  
           vx(1, ntotal + nvirt) = 0.
 	  vx(2, ntotal + nvirt) = 0.
         enddo
@@ -155,35 +155,35 @@ c     Monaghan type virtual particle on the Right side
 	  itype(ntotal + i) = -2
 	  hsml(ntotal + i) = dx
         enddo
-
-      endif
+        
+      endif   
 
       if (mod(itimestep,save_step).eq.0) then
         open(1,file="../data/xv_vp.dat")
         open(2,file="../data/state_vp.dat")
-        open(3,file="../data/other_vp.dat")
+        open(3,file="../data/other_vp.dat")            
         write(1,*) nvirt
-        do i = ntotal + 1, ntotal + nvirt
-          write(1,1001) i, (x(d, i), d=1,dim), (vx(d, i), d = 1, dim)
+        do i = ntotal + 1, ntotal + nvirt         
+          write(1,1001) i, (x(d, i), d=1,dim), (vx(d, i), d = 1, dim)              
           write(2,1002) i, mass(i), rho(i), p(i), u(i)
-          write(3,1003) i, itype(i), hsml(i)
-        enddo
+          write(3,1003) i, itype(i), hsml(i)                               
+        enddo       
 1001    format(1x, I6, 6(2x, e14.8))
-1002    format(1x, I6, 7(2x, e14.8))
+1002    format(1x, I6, 7(2x, e14.8)) 
 1003    format(1x, I6, 2x, I4, 2x, e14.8)
         close(1)
-        close(2)
-        close(3)
-      endif
+        close(2) 
+        close(3) 
+      endif 
        itimestep=int(tm/dt)
       if (mod(itimestep,print_step).eq.0) then
         if (int_stat) then
          print *,' >> Statistics: Virtual boundary particles:'
          print *,'          Number of virtual particles:',NVIRT
-        endif
+        endif     
       endif
-      if(this_image()==1) then
-      end
+      if(this_image()==1) then  
+      end 
 
       subroutine fs_dam(ntotal,hsml,mass,niac,pair_i,pair_j,w,dwdx,
      &	vx,itype,x,rho,drhodt)
@@ -204,15 +204,15 @@ c     rho    : Density                                             [out]
       use interf
       implicit none
       include 'param.inc'
-
+      
       integer ntotal, niac, pair_i(:),
-     &        pair_j(:), itype(:)
+     &        pair_j(:), itype(:)  
       double precision hsml(:),mass(:), w(:),
-     &       rho(:)
-      integer i, j, k, d,ki
+     &       rho(:) 
+      integer i, j, k, d,ki      
       double precision selfdens, r,
      &dwdx(:, :),
-     &vx(:,:), x(:,:), drhodt(:)
+     &vx(:,:), x(:,:), drhodt(:) 
       double precision    vcc
 	double precision rho_ref
       double precision,allocatable:: dvx(:),rho_sum(:),drhodt_temp(:)
@@ -260,32 +260,32 @@ c     Calculate SPH sum for rho:
       enddo
 
 c     Thirdly, calculate the normalized rho, rho=sum(rho)/sum(w)
-
-      if (nor_density) then
+     
+      if (nor_density) then 
         do i=1, ntotal
           rho_sum(i)=rho_sum(i)/wi(i)
         enddo
-      endif
+      endif 
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       do i = 1, ntotal
         drhodt(i) = 0.
 	 drhodt_temp(i) = 0.
       enddo
-
-      do k=1,niac
+     
+      do k=1,niac      
         i = pair_i(k)
         j = pair_j(k)
         do d=1,dim
-          dvx(d) = vx(d,i) - vx(d,j)
-        enddo
-        vcc = dvx(1)*dwdx(1,k)
+          dvx(d) = vx(d,i) - vx(d,j) 
+        enddo        
+        vcc = dvx(1)*dwdx(1,k)        
         do d=2,dim
           vcc = vcc + dvx(d)*dwdx(d,k)
-        enddo
+        enddo    
         drhodt_temp(i) = drhodt_temp(i) + mass(j)*vcc
-        drhodt_temp(j) = drhodt_temp(j) + mass(i)*vcc
-      enddo
-
+        drhodt_temp(j) = drhodt_temp(j) + mass(i)*vcc       
+      enddo  
+	        
       do i=1,ntotal
 	if((rho_sum(i)/rho_ref<1d0).or.(rho_sum(i)/rho_ref>=1.05)) then
 	 drhodt(i)=drhodt_temp(i)
@@ -296,4 +296,5 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       deallocate(dvx,rho_sum,drhodt_temp)
       deallocate(hv, wi)
       end
-
+      
+      

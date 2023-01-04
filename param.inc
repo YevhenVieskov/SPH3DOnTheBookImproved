@@ -6,8 +6,6 @@ c---------------------------------------------------------
 c     dim : Dimension of the problem (1, 2 or 3)
       integer dim
       parameter ( dim = 2)
-      integer nd
-      parameter ( nd = 3)
 
 c     maxn    : Maximum number of particles
 c     max_interation : Maximum number of interaction pairs
@@ -42,7 +40,7 @@ c     nnps = 1 : Simplest and direct searching
 c            2 : Sorting grid linked list
 c            3 : Tree algorithm
       integer nnps 
-      parameter(nnps = 1 )
+      parameter(nnps = 3 )
 
 c     Smoothing length evolution (sle) algorithm
 c     sle = 0 : Keep unchanged,
@@ -57,10 +55,6 @@ c     Smoothing kernel function
 c     skf = 1, cubic spline kernel by W4 - Spline (Monaghan 1985)
 c         = 2, Gauss kernel   (Gingold and Monaghan 1981) 
 c         = 3, Quintic kernel (Morris 1997)
-c         = 4, Gaussian kernel with compact support
-c		  = 5, Linear quartic kernel
-c         = 6, Core triangle kernel(3D)
-c         = 7, High order Core triangle kernel(3D)
       integer skf 
       parameter(skf = 1)
 
@@ -90,21 +84,18 @@ c     nor_density =  .true. : Density normalization by using CSPM,
 c                    .false.: No normalization.
       
       logical summation_density, average_velocity, config_input,
-     & virtual_part, vp_input, visc, ex_force, heat_artificial,
-     & visc_artificial, self_gravity, nor_density,ghost_part
-	  logical idbp_part, igdb_part
+     &        virtual_part, vp_input, visc, ex_force, heat_artificial,
+     & visc_artificial, self_gravity, nor_density,ghost_part,idbp_part
       parameter ( summation_density  = .false. )
       parameter ( average_velocity  = .false. )
       parameter ( config_input  = .false. )
       parameter ( virtual_part  = .false. )
-	  parameter ( ghost_part  = .false. )
-	  parameter ( idbp_part  = .true. )
-	  parameter ( igdb_part  = .false. )
-
+	  parameter ( ghost_part  = .true. )
+	  parameter ( idbp_part  = .false. )
       parameter ( vp_input  = .false.  )
-      parameter ( visc  = .true.  )
+      parameter ( visc  = .false.  )
       parameter ( ex_force  = .true.)
-      parameter ( visc_artificial  = .false. )
+      parameter ( visc_artificial  = .true. )
       parameter ( heat_artificial  = .false. )
       parameter ( self_gravity  = .true. )      
       parameter ( nor_density  = .false. )      
@@ -125,8 +116,8 @@ c     moni_particle: The particle number for information monitoring.
       logical int_stat
       parameter ( int_stat = .true. )
       integer print_step, save_step, moni_particle
-      parameter ( print_step = 1 ,
-     &            save_step = 1,
+      parameter ( print_step = 100 ,
+     &            save_step = 100,
      &            moni_particle = 1600   )
            
       double precision pi
@@ -136,12 +127,12 @@ c     moni_particle: The particle number for information monitoring.
 c	  Shepard kernel correction - ishepard, step correction -istepshepard
 		logical ishepard
 		integer istepshepard
-        parameter ( ishepard  = .false.)
+        parameter ( ishepard  = .true.)
 		parameter ( istepshepard =30)
 
 c      integrator parameter
        logical ileapfrog,iverlet,iprcorr,ibeeman,isymplectic
-       parameter ( ileapfrog  = .false.)
+       parameter ( ileapfrog  = .true.)
 	   parameter ( iverlet  = .false.)
 	   parameter ( iprcorr  = .false.)
 	   parameter ( ibeeman  = .false.)
@@ -149,7 +140,7 @@ c      integrator parameter
 
 c      symplectic integrator for SPH
 	   logical isym_euler,isym_verlet,isym_verlet2
-	   parameter ( isym_euler  = .true.)
+	   parameter ( isym_euler  = .false.)
 	   parameter ( isym_verlet  = .false.)
 	   parameter ( isym_verlet2  = .false.)
 c    Hughes & Grahams 2009 correction integrator, only for dynamic boundary particles
@@ -179,12 +170,11 @@ c	   Monaghan tensile instability correction
 c     Simulation cases
 c     shocktube = .true. : carry out shock tube simulation
 c     shearcavity = .true. : carry out shear cavity simulation
-      logical shocktube,shearcavity,breakdam,drop,itank
+      logical shocktube,shearcavity,breakdam,drop
       parameter ( shocktube  = .false.)
       parameter ( shearcavity  = .false.)
 	  parameter ( breakdam  = .true. )
 	  parameter (drop=.false.)
-      parameter (itank=.false.)
 
 c	  antipenetration force select apf=1- original, apf=2-new
 	  integer apf

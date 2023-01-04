@@ -14,15 +14,15 @@ c     w      : Kernel for all interaction pairs                     [in]
 c     vx     : Velocity of each particle                            [in]
 c     rho    : Density of each particle                             [in]
 c     av     : Average velocityof each particle                    [out]
-c      use interf
+      use interf
       implicit none
       include 'param.inc'
-
+      
       integer ntotal, niac, pair_i(:),
      &        pair_j(:)
       double precision   mass(:),w(:),
-     &       vx(:,:), rho(:), av(:, :)
-      integer i,j,k,d
+     &       vx(:,:), rho(:), av(:, :)       
+      integer i,j,k,d       
       double precision   vcc, epsilon
       double precision,allocatable:: dvx(:)
       allocate(dvx(dim))
@@ -30,28 +30,28 @@ c     epsilon --- a small constants chosen by experence, may lead to instability
 c     for example, for the 1 dimensional shock tube problem, the E <= 0.3
 
       epsilon =0.1                    !0.3
-
+      
       do i = 1, ntotal
         do d = 1, dim
           av(d,i) = 0.
-        enddo
+        enddo 
       enddo
-
-      do k=1,niac
+     
+      do k=1,niac       
         i = pair_i(k)
-        j = pair_j(k)
+        j = pair_j(k)       
         do d=1,dim
-          dvx(d) = vx(d,i) - vx(d,j)
+          dvx(d) = vx(d,i) - vx(d,j)            
           av(d, i) = av(d,i) - 2*mass(j)*dvx(d)/(rho(i)+rho(j))*w(k)
-          av(d, j) = av(d,j) + 2*mass(i)*dvx(d)/(rho(i)+rho(j))*w(k)
-        enddo
-      enddo
-
+          av(d, j) = av(d,j) + 2*mass(i)*dvx(d)/(rho(i)+rho(j))*w(k)                      
+        enddo                    
+      enddo  
+        
       do i = 1, ntotal
         do d = 1, dim
           av(d,i) = epsilon * av(d,i)
-        enddo
-      enddo
-
+        enddo 
+      enddo             
+      
       deallocate(dvx)
       end

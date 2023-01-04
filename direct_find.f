@@ -3,8 +3,8 @@
 
 c----------------------------------------------------------------------
 c   Subroutine to calculate the smoothing funciton for each particle and
-c   the interaction parameters used by the SPH algorithm. Interaction
-c   pairs are determined by directly comparing the particle distance
+c   the interaction parameters used by the SPH algorithm. Interaction 
+c   pairs are determined by directly comparing the particle distance 
 c   with the corresponding smoothing length.
 
 c     itimestep : Current time step                                 [in]
@@ -17,34 +17,34 @@ c     pair_j    : List of second partner of interaction pair       [out]
 c     w         : Kernel for all interaction pairs                 [out]
 c     dwdx      : Derivative of kernel with respect to x, y and z  [out]
 c     countiac  : Number of neighboring particles                  [out]
-c      use interf
+      use interf
       implicit none
       include 'param.inc'
-
+      
       integer itimestep, ntotal,niac,pair_i(:),
      &        pair_j(:), countiac(:)
       double precision hsml(:), x(:,:), w(:),
      &       dwdx(:,:)
       integer i, j, d,  sumiac, maxiac, miniac, noiac,
-     &        maxp, minp, scale_k
-      double precision  driac, r, mhsml
+     &        maxp, minp, scale_k 
+      double precision  driac, r, mhsml  
       double precision,allocatable:: dxiac(:),tdwdx(:)
       allocate(dxiac(dim),tdwdx(dim))
-      if (skf.eq.1) then
-        scale_k = 2
-      else if (skf.eq.2) then
-        scale_k = 3
-      else if (skf.eq.3) then
-        scale_k = 3
-      endif
-
+      if (skf.eq.1) then 
+        scale_k = 2 
+      else if (skf.eq.2) then 
+        scale_k = 3 
+      else if (skf.eq.3) then 
+        scale_k = 3 
+      endif 
+     
       do i=1,ntotal
         countiac(i) = 0
       enddo
-
+      
       niac = 0
 
-      do i=1,ntotal-1
+      do i=1,ntotal-1     
         do j = i+1, ntotal
           dxiac(1) = x(1,i) - x(1,j)
           driac    = dxiac(1)*dxiac(1)
@@ -54,10 +54,10 @@ c      use interf
           enddo
           mhsml = (hsml(i)+hsml(j))/2.
           if (sqrt(driac).lt.scale_k*mhsml) then
-            if (niac.lt.max_interaction) then
+            if (niac.lt.max_interaction) then    
 
 c     Neighboring pair list, and totalinteraction number and
-c     the interaction number for each particle
+c     the interaction number for each particle 
 
               niac = niac + 1
               pair_i(niac) = i
@@ -71,15 +71,15 @@ c     Kernel and derivations of kernel
               call kernel(r,dxiac,mhsml,w(niac),tdwdx)
               do d=1,dim
                 dwdx(d,niac) = tdwdx(d)
-              enddo
+              enddo                                  	     
             else
               print *,
-     &        ' >>> ERROR <<< : Too many interactions'
+     &        ' >>> ERROR <<< : Too many interactions' 
               stop
             endif
           endif
         enddo
-      enddo
+      enddo  
 
 c     Statistics for the interaction
 
@@ -93,13 +93,13 @@ c     Statistics for the interaction
 	  maxiac = countiac(i)
 	  maxp = i
 	endif
-	if (countiac(i).lt.miniac) then
+	if (countiac(i).lt.miniac) then 
 	  miniac = countiac(i)
           minp = i
 	endif
         if (countiac(i).eq.0)      noiac  = noiac + 1
       enddo
-
+ 
       if (mod(itimestep,print_step).eq.0) then
         if (int_stat) then
           print *,' >> Statistics: interactions per particle:'
@@ -108,7 +108,7 @@ c     Statistics for the interaction
           print *,'**** Average :',real(sumiac)/real(ntotal)
           print *,'**** Total pairs : ',niac
           print *,'**** Particles with no interactions:',noiac
-        endif
-      endif
+        endif     
+      endif    
       deallocate(dxiac,tdwdx)
       end
